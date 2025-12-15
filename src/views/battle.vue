@@ -20,12 +20,14 @@
             <h2>Joueur 💙</h2>
         </div>
     </div>
+    <AllButtom />
   </div>
   <li><RouterLink to="/" class="hover:text-primary">Accueil</RouterLink></li>
 </template>
 
 <script setup>
     import Header from '../components/Header.vue'
+    import AllButtom from '../components/allButtom.vue'
     import pokemon1 from '../assets/image/pokemon1.gif'
     import pokemon2 from '../assets/image/pokemon2.gif'
 </script>
