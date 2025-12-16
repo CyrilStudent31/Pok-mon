@@ -7,8 +7,8 @@ import {ref} from vue
 
 const dmgAttA
 const dmgAttP
-const PvPlayer
-const PvAdversaire
+const PvPlayer = 100
+const PvAdversaire = 100;
 
 attackPlayer(){
     const dmgAttP = Math.floor(Math.random() * 15) + 10
