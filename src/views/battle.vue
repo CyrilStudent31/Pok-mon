@@ -31,9 +31,10 @@
     
     <!-- Battle buttons with functionality -->
     <div id="container-buttons">
-        <button type="button" class="btn btn-primary" @click="attackPlayer" :disabled="gameOver">ATK</button>
-        <button type="button" class="btn btn-warning" @click="attaqueAdversaireSpe" :disabled="gameOver">ATK SPECIAL</button>
-        <button type="button" class="btn btn-success" @click="healPlayer" :disabled="gameOver">SOIN</button>
+        <p>Round: {{ currentRound }}</p>
+        <button type="button" class="btn btn-primary" @click="attackAdversaire" :disabled="gameOver">ATTAQUE</button>
+        <button type="button" class="btn btn-warning" @click="specialAttackAdversaire" :disabled="gameOver || !canUseSpecialAttack">ATTAQUE SPÉCIALE</button>
+        <button type="button" class="btn btn-success" @click="healPlayer" :disabled="gameOver">SE SOIGNER</button>
         <button type="button" class="btn btn-danger" @click="surrender">ABANDONNER</button>
     </div>
     
@@ -63,9 +64,13 @@
     const PvPlayer = ref(100)
     const PvAdversaire = ref(100)
     const log = ref([])
+    const currentRound = ref(0)
     
     // Game over detection
     const gameOver = computed(() => PvPlayer.value <= 0 || PvAdversaire.value <= 0)
+
+    // Special attack availability (every 3 rounds)
+    const canUseSpecialAttack = computed(() => currentRound.value % 3 === 0 && currentRound.value > 0)
 
     // Health bars for monster (life1 = adversaire)
     const life1 = computed(() => PvAdversaire.value)
@@ -93,55 +98,58 @@
         width: life2.value + "%"
     }));
 
-    // Battle functions
-    const attackPlayer = () => {
+    // Battle functions according to assignment requirements
+    // attackAdversaire: Player attacks adversary
+    const attackAdversaire = () => {
         if (gameOver.value) return
         
-        // Player attacks adversaire
+        currentRound.value++
         const damage = Math.floor(Math.random() * 15) + 10
         if (damage < PvAdversaire.value) {
             PvAdversaire.value -= damage
         } else {
             PvAdversaire.value = 0
         }
-        log.value.push(`Joueur attaque : -${damage} HP au monstre`)
+        log.value.push(`Tour ${currentRound.value}: Joueur attaque → -${damage} HP au monstre`)
         
         // Adversaire counter-attacks if still alive
         if (PvAdversaire.value > 0) {
             setTimeout(() => {
-                attaqueAdversaire()
+                attackPlayer()
             }, 1000)
         }
     }
 
-    const attaqueAdversaire = () => {
+    // attackPlayer: Adversary attacks player (hits harder than player)
+    const attackPlayer = () => {
         if (gameOver.value) return
         
-        const damage = Math.floor(Math.random() * 15) + 5
+        const damage = Math.floor(Math.random() * 20) + 15 // Adversary hits harder
         if (damage < PvPlayer.value) {
             PvPlayer.value -= damage
         } else {
             PvPlayer.value = 0
         }
-        log.value.push(`Monstre attaque : -${damage} HP au joueur`)
+        log.value.push(`Monstre contre-attaque → -${damage} HP au joueur`)
     }
 
-    const attaqueAdversaireSpe = () => {
-        if (gameOver.value) return
+    // Special attack: Available every 3 rounds
+    const specialAttackAdversaire = () => {
+        if (gameOver.value || !canUseSpecialAttack.value) return
         
-        // Player special attack
-        const damage = Math.floor(Math.random() * 25) + 15
+        currentRound.value++
+        const damage = Math.floor(Math.random() * 30) + 20
         if (damage < PvAdversaire.value) {
             PvAdversaire.value -= damage
         } else {
             PvAdversaire.value = 0
         }
-        log.value.push(`Joueur attaque spéciale : -${damage} HP au monstre`)
+        log.value.push(`Tour ${currentRound.value}: Joueur ATTAQUE SPÉCIALE → -${damage} HP au monstre`)
         
         // Adversaire counter-attacks if still alive
         if (PvAdversaire.value > 0) {
             setTimeout(() => {
-                attaqueAdversaire()
+                attackPlayer()
             }, 1000)
         }
     }
@@ -149,13 +157,14 @@
     const healPlayer = () => {
         if (gameOver.value) return
         
+        currentRound.value++ // Healing costs a round
         const healing = Math.floor(Math.random() * 20) + 10
-        PvPlayer.value = Math.min(100, PvPlayer.value + healing)
-        log.value.push(`Joueur se soigne : +${healing} HP`)
+        PvPlayer.value = Math.min(100, PvPlayer.value + healing) // Ensure HP doesn't exceed 100
+        log.value.push(`Tour ${currentRound.value}: Joueur se soigne → +${healing} HP`)
         
         // Adversaire attacks while player heals
         setTimeout(() => {
-            attaqueAdversaire()
+            attackPlayer()
         }, 1000)
     }
 
@@ -167,6 +176,7 @@
     const resetGame = () => {
         PvPlayer.value = 100
         PvAdversaire.value = 100
+        currentRound.value = 0
         log.value = []
         log.value.push("Nouveau combat commencé !")
     }

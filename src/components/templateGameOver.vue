@@ -4,8 +4,8 @@
     <div class="card text-center shadow-lg" style="max-width: 400px;">
       <div class="card-body">
         <h1 class="card-title display-5 fw-bold">
-          <span v-if="winner === 'adversaire'" class="text-danger">Votre adversaire a gagné</span>
-          <span v-else-if="winner === 'joueur'" class="text-success">Vous avez gagné</span>
+          <span v-if="winner === 'adversaire'" class="text-danger">PERDU</span>
+          <span v-else-if="winner === 'joueur'" class="text-success">VICTOIRE</span>
           <span v-else class="text-warning">ÉGALITÉ</span>
         </h1>
         <p class="card-text">
