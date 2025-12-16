@@ -10,9 +10,13 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
-import { useCombatStore } from '@/stores/combatStore'
+import { defineProps } from 'vue'
 
-// On récupère le log depuis le store
-const { log } = storeToRefs(useCombatStore())
+// Receive log from parent component
+const props = defineProps({
+  log: {
+    type: Array,
+    default: () => []
+  }
+})
 </script>

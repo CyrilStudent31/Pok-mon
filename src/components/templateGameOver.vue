@@ -20,30 +20,37 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { computed, defineProps, defineEmits } from 'vue'
 
-const vieJoueur = ref(100)
-const vieAdversaire = ref(100)
-const winner = ref(null)
+const props = defineProps({
+  vieJoueur: {
+    type: Number,
+    required: true
+  },
+  vieAdversaire: {
+    type: Number,
+    required: true
+  }
+})
 
-watchEffect(() => {
-  const jDead = vieJoueur.value <= 0
-  const aDead = vieAdversaire.value <= 0
+const emit = defineEmits(['reset-game'])
+
+const winner = computed(() => {
+  const jDead = props.vieJoueur <= 0
+  const aDead = props.vieAdversaire <= 0
 
   if (jDead && aDead) {
-    winner.value = 'egalite' //ou aucun
+    return 'egalite'
   } else if (jDead) {
-    winner.value = 'adversaire'
+    return 'adversaire'
   } else if (aDead) {
-    winner.value = 'joueur'
+    return 'joueur'
   } else {
-    winner.value = null
+    return null
   }
 })
 
 function resetPartie() {
-  vieJoueur.value = 100
-  vieAdversaire.value = 100
-  winner.value = null
+  emit('reset-game')
 }
 </script>
