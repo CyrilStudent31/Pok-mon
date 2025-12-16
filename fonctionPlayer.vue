@@ -1,47 +1,54 @@
 <template>
-<script setup lang ='js'>
-import {ref} from vue
-<div class="mb-3">
-
-</div>
-
-const dmgAttA
-const dmgAttP
-const PvPlayer
-const PvAdversaire
-
-attackPlayer(){
-    const dmgAttP = Math.floor(Math.random() * 15) + 10
-    if (dmgAttP>PvPlayer) {
-        PvPlayer = PvPlayer - dmgAttP;
-    }
-    else {
-        PvPlayer = 0;
-    }
-    this.log.push(Monstre Attaque : -${dmgAttP} pts)
-}
-attaqueAdversaire() {
-      const dmgAttA = Math.floor(Math.random() * 15)
-      if (dmgAttA>PvAdversaire) {
-        PvAdversaire = PvAdversaire - dmgAttA;
-    }
-    else {
-        PvAdversaire = 0;
-    }
-    
-      this.log.push(Monstre Attaque : -${dmgAttA} pts)
-}
-attaqueAdversaireSpe() {
-      const dmgAttA = Math.floor(Math.random() * 15) + 5
-      if (dmgAttA>PvAdversaire) {
-        PvAdversaire = PvAdversaire - dmgAttA;
-    }
-    else {
-        PvAdversaire = 0;
-    }
-    
-      this.log.push(Monstre Attaque : -${dmgAttA} pts)
-}
-
-</script>
+  <div class="mb-3">
+  </div>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+
+const dmgAttA = ref(0)
+const dmgAttP = ref(0)
+const PvPlayer = ref(100)
+const PvAdversaire = ref(100)
+const log = ref([])
+
+const attackPlayer = () => {
+    const damage = Math.floor(Math.random() * 15) + 10
+    if (damage < PvPlayer.value) {
+        PvPlayer.value = PvPlayer.value - damage;
+    } else {
+        PvPlayer.value = 0;
+    }
+    log.value.push(`Joueur Attaque : -${damage} pts`)
+}
+
+const attaqueAdversaire = () => {
+    const damage = Math.floor(Math.random() * 15)
+    if (damage < PvAdversaire.value) {
+        PvAdversaire.value = PvAdversaire.value - damage;
+    } else {
+        PvAdversaire.value = 0;
+    }
+    log.value.push(`Monstre Attaque : -${damage} pts`)
+}
+
+const attaqueAdversaireSpe = () => {
+    const damage = Math.floor(Math.random() * 15) + 5
+    if (damage < PvAdversaire.value) {
+        PvAdversaire.value = PvAdversaire.value - damage;
+    } else {
+        PvAdversaire.value = 0;
+    }
+    log.value.push(`Monstre Attaque Spéciale : -${damage} pts`)
+}
+
+// Export functions to make them available for other components
+defineExpose({
+    attackPlayer,
+    attaqueAdversaire,
+    attaqueAdversaireSpe,
+    PvPlayer,
+    PvAdversaire,
+    log
+})
+</script>
