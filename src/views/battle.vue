@@ -17,42 +17,45 @@
 <script setup>
     import { ref, computed } from 'vue';
 
+   ;
+    
+
     //------------------BARE DE VIE DU 1ER PERSONNAGE---------------------------------
-    //barre de vie du 1 er personnage
-    const life1 = ref("20");
+    //Santé du 1 er personnage
+    // const PvPlayer = ref("90")
     //couleur de la barre de vie du 1er personnage avec MAJ en fonction de son nombre de pv
     const bgColor1 = computed(() => {
-        if (life1.value == 100){
+        if (PvPlayer.value == 100){
             return "blue"}
-        else if (life1.value > 50){
+        else if (PvPlayer.value > 50){
             return "lightGreen"}
-        else if (life1.value > 20){
+        else if (PvPlayer.value > 20){
             return "orange"} 
         else return "red";
     });
     //propriété CCS de la barre de vie du 1er personnage
     const lifeProgress1 = computed(() => ({
     backgroundColor: bgColor1.value,
-    width: life1.value + "%"
+    width: PvPlayer.value + "%"
     }));
 
     //-----------------BARRE DE VIE DU 2EME PERSONNAGE---------------------------------------
-    //barre de vie du 2eme personnage
-    const life2 = ref("100");
+    //Santé du 2eme personnage
+    // const PvAdversaire = ref("100");
     //couleur de la barre de vie du 2eme personnage avec MAJ en fonction de son nombre de PV
       const bgColor2 = computed(() => {
-        if (life2.value == 100){
+        if (PvAdversaire.value == 100){
             return "blue"}
-        else if (life2.value > 50){
+        else if (PvAdversaire.value > 50){
             return "green"}
-        else if (life2.value > 20){
+        else if (PvAdversaire.value > 20){
             return "orange"} 
         else return "red";
     });
     //propriété CSS de la barre de vie du 2eme personnage
     const lifeProgress2 = computed(() => ({
     backgroundColor: bgColor2.value,
-    width: life2.value + "%"
+    width: PvAdversaire.value + "%"
     }));
     //-------------------------------------------------------------------------
 </script>
