@@ -42,6 +42,18 @@ attaqueAdversaireSpe() {
     
       this.log.push(Monstre Attaque : -${dmgAttA} pts)
 }
+healPlayer() {
+      this.currentRound++;
+      const healValue = Math.floor(Math.random() * (15 - 8)) + 8;
+
+      // S'assurer que la vie ne dépasse pas 100
+      if (PvPlayer + healValue > 100) {
+        PvPlayer = 100;
+        attaqueAdversaire(dmgAttA=0)
+      } else {
+        PvPlayer += healValue;
+        attaqueAdversaire(dmgAttA=0)
+      }
 
 </script>
 </template>
